@@ -54,7 +54,7 @@ class AndroidPlugin(private val androidExtension: BaseExtension) : Plugin<Projec
     override fun apply(project: Project) {
         val collectConsumerRulesTask = project.tasks.register(COLLECT_CONSUMER_RULES_TASK_NAME)
         registerDependencyTransforms(project)
-        val proguardBlock = project.extensions.create<ProGuardAndroidExtension>("proguard", ProGuardAndroidExtension::class.java, project)
+        val proguardBlock = project.extensions.create<ProGuardAndroidExtension>("dProtect", ProGuardAndroidExtension::class.java, project)
 
         val projectType = when (androidExtension) {
             is AppExtension -> ANDROID_APPLICATION
@@ -233,7 +233,7 @@ This is likely due to a transitive dependency introduced by Android Gradle plugi
 Please update your configuration to exclude the old version of ProGuard, for example:
 
 buildscript {
-    // ... 
+    // ...
     dependencies {
         // ...
         classpath("com.android.tools.build:gradle:x.y.z") {

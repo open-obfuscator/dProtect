@@ -5,10 +5,13 @@ plugins {
 }
 
 allprojects {
-    group = 'com.guardsquare'
-    version = proguardVersion
+    group = 're.obfuscator'
+    version = dProtectVersion
     repositories {
         mavenLocal()
+        maven {
+          url = uri("https://maven.pkg.github.com/open-obfuscator/dProtect")
+        }
     }
 }
 
@@ -38,10 +41,10 @@ allprojects { Project project ->
                     repositories {
                         maven {
                             name = 'Github'
-                            url = uri('https://maven.pkg.github.com/guardsquare/proguard')
+                            url = uri('https://maven.pkg.github.com/open-obfuscator/dProtect')
                             credentials {
-                                username = project.findProperty('PROGUARD_GITHUB_USERNAME')
-                                password = project.findProperty('PROGUARD_GITHUB_TOKEN')
+                                username = System.getenv('DPROTECT_GITHUB_USERNAME')
+                                password = System.getenv('DPROTECT_GITHUB_TOKEN')
                             }
                         }
                     }
@@ -60,9 +63,9 @@ allprojects { Project project ->
                     publications {
                         create(project.name, MavenPublication) {
                             pom {
-                                artifactId = "proguard-$project.name"
+                                artifactId = "dprotect-$project.name"
                                 name = "$group:$artifactId"
-                                url = 'https://www.guardsquare.com/proguard'
+                                url = 'https://obfuscator.re/dprotect'
                                 licenses {
                                     license {
                                         name = 'GNU General Public License, Version 2'
@@ -72,11 +75,11 @@ allprojects { Project project ->
                                 }
                                 issueManagement {
                                     system = 'Github Tracker'
-                                    url = 'https://github.com/Guardsquare/proguard/issues'
+                                    url = 'https://github.com/open-obfuscator/dProtect/issues'
                                 }
                                 scm {
-                                    url = 'https://github.com/Guardsquare/proguard.git'
-                                    connection = 'scm:git:https://github.com/Guardsquare/proguard.git'
+                                    url = 'https://github.com/open-obfuscator/dProtect.git'
+                                    connection = 'scm:git:https://github.com/open-obfuscator/dProtect.git'
                                 }
                                 developers {
                                     developer {
@@ -145,10 +148,12 @@ allprojects { Project project ->
 
 distributions {
     main {
-        distributionBaseName.set('proguard')
+        distributionBaseName.set('dprotect')
         contents {
             into('lib') {
+                from tasks.getByPath(':dprotect:fatJar').outputs
                 from tasks.getByPath(':proguard-app:fatJar').outputs
+                from tasks.getByPath(':gradle:fatJar').outputs
                 from tasks.getByPath(':gui:fatJar').outputs
                 from tasks.getByPath(':retrace:fatJar').outputs
                 from tasks.getByPath(':ant:fatJar').outputs

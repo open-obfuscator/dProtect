@@ -2,12 +2,12 @@ name: Continuous Integration
 on:
   pull_request:
     branches:
-      - master
-      - beta
+      - skip
+      - skip
   push:
     branches:
-      - master
-      - beta
+      - skip
+      - skip
 jobs:
   build:
     runs-on: ${{ matrix.os }}

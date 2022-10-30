@@ -1,199 +1,95 @@
 <p align="center">
   <br />
   <br />
-  <a href="https://www.guardsquare.com/proguard">
-    <img
-      src="https://www.guardsquare.com/hubfs/Logos/ProGuard-Logo-Email.png"
-      alt="ProGuard" width="400">
+  <a href="https://obfuscator.re/dprotect">
+    <img src=".github/img/banner.webp" alt="dProtect" width="100%">
   </a>
 </p>
 
-<!-- Badges -->
 <p align="center">
-  <!-- CI -->
-  <a href="https://github.com/Guardsquare/proguard/actions?query=workflow%3A%22Continuous+Integration%22">
-    <img src="https://github.com/Guardsquare/proguard/workflows/Continuous%20Integration/badge.svg">
-  </a>
-  
-  <!-- Github version -->
-  <!--
-  <a href="releases">
-    <img src="https://img.shields.io/github/v/release/guardsquare/proguard">
-  </a>
-  -->
-    
-  <!-- Maven -->
-  <a href="https://search.maven.org/search?q=g:com.guardsquare">
-    <img src="https://img.shields.io/maven-central/v/com.guardsquare/proguard-base">
-  </a>
-  
-  <!-- License -->
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/guardsquare/proguard">
-  </a>
-
-  <!-- Twitter -->
-  <a href="https://twitter.com/Guardsquare">
-    <img src="https://img.shields.io/twitter/follow/guardsquare?style=social">
+    <img src="https://img.shields.io/github/license/open-obfuscator/dProtect">
   </a>
 </p>
 
-<br />
-<p align="center">
-  <a href="#-quick-start"><b>Quick Start</b></a> •
-  <a href="#-features"><b>Features</b></a> •
-  <a href="#-contributing"><b>Contributing</b></a> •
-  <a href="#-license"><b>License</b></a>
-</p>
-<br />
-
-ProGuard is a free shrinker, optimizer, obfuscator, and preverifier for Java
-bytecode:
-
-* It detects and removes unused classes, fields, methods, and attributes.
-
-* It optimizes bytecode and removes unused instructions.
-
-* It renames the remaining classes, fields, and methods using short
-  meaningless names.
-
-The resulting applications and libraries are smaller and faster.
-
-## ❓ Getting Help
-If you have **usage or general questions** please ask them in the <a href="https://community.guardsquare.com/?utm_source=github&utm_medium=site-link&utm_campaign=github-community">**Guardsquare Community**.</a>  
-Please use <a href="https://github.com/guardsquare/proguard/issues">**the issue tracker**</a> to report actual **bugs 🐛, crashes**, etc.
-<br />
-<br />
-
-## 🚀 Quick Start
-
-### Command line
-
-First, download the latest release from [GitHub releases](https://github.com/Guardsquare/proguard/releases).
-
-To run ProGuard, on Linux/MacOS, just type:
+dProtect is an extension of Proguard with enhanced code obfuscation features. While Proguard is known for obfuscating
+symbols (package names, class names, ...) and optimizing Java/Kotlin code, dProtect brings code obfuscation
+for Java and Kotlin on the top of Proguard:
 
 ```bash
-bin/proguard.sh <options...>
+# Arithmetic Obfuscation
+-obfuscate-arithmetic,low class dprotect.examples.**
+-obfuscate-arithmetic,high,skipfloat class dprotect.internal.**
+
+# Strings Obfuscation
+-obfuscate-strings class dprotect.examples.**
+-obfuscate-strings class dprotect.internal.CheckPassword {
+    public static java.lang.String getPassword();
+    public static java.lang.String getLogin();
+
+    private static java.lang.String KEY;
+}
+
+# Control-flow obfuscation
+-obfuscate-control-flow class dprotect.internal.api.**
+
+# Constants Obfuscation
+-obfuscate-constants class dprotect.internal.api.Enum {
+  *;
+}
 ```
 
-or on Windows:
+dProtect follows the same integration mechanism as Proguard such as it can be instantiated in an Android
+Gradle-based project as follows:
 
-```
-bin\proguard.bat <options...>
-```
+<h6>build.gradle</h6>
 
-Typically, you'll put most options in a configuration file (say,
-`myconfig.pro`), and just call
-
-```bash
-bin/proguard.sh @myconfig.pro
-```
-or on Windows:
-
-```
-bin\proguard.bat @myconfig.pro
-```
-
-All available options are described in the [configuration section of the manual](https://www.guardsquare.com/manual/configuration/usage).
-
-### Gradle Task
-
-ProGuard can be run as a task in Gradle. Before you can use the proguard task, you have to make sure Gradle can
-find it in its class path at build time. One way is to add the following
-line to your **`build.gradle`** file which will download ProGuard from Maven Central:
-
-```Groovy
+```gradle
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+          url = uri("https://maven.pkg.github.com/open-obfuscator/dProtect")
+        }
     }
     dependencies {
-        classpath 'com.guardsquare:proguard-gradle:7.1.0'
+        classpath 're.obfuscator:dprotect-gradle:1.0.0'
     }
 }
 ```
 
-You can then define a task with configuration:
+<h6>app/build.gradle</h6>
 
-```Groovy
-tasks.register('proguard', ProGuardTask) {
-    configuration file('proguard.pro')
-
-    injars(tasks.named('jar', Jar).flatMap { it.archiveFile })
-
-    // Automatically handle the Java version of this build.
-    if (System.getProperty('java.version').startsWith('1.')) {
-        // Before Java 9, the runtime classes were packaged in a single jar file.
-        libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
-    } else {
-        // As of Java 9, the runtime classes are packaged in modular jmod files.
-        libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
-        //libraryjars "${System.getProperty('java.home')}/jmods/....."
+```gradle
+apply plugin: 're.obfuscator.dprotect'
+// ...
+dProtect {
+    configurations {
+      release {
+          configuration 'dprotect-rules.pro'
+      }
     }
-
-    verbose
-
-    outjars(layout.buildDirectory.file("libs/${baseCoordinates}-minified.jar"))
 }
 ```
 
-The embedded configuration is much like a standard ProGuard
-configuration. You can find more details on the [Gradle setup page](https://www.guardsquare.com/manual/setup/gradle).
+<img src=".github/img/dprotect-pipeline.webp" alt="dProtect Pipeline" width="100%">
 
-## ✨ Features
+You can also find out more information here: https://obfuscator.re/dprotect
 
-ProGuard works like an advanced optimizing compiler, removing unused classes,
-fields, methods, and attributes, shortening identifiers, merging classes,
-inlining methods, propagating constants, removing unused parameters, etc.
+### Contact
 
-* The optimizations typically reduce the size of an application by anything
-  between 20% and 90%. The reduction mostly depends on the size of external
-  libraries that ProGuard can remove in whole or in part.
+You can reach out by email at this address: `ping@obfuscator.re`
 
-* The optimizations may also improve the performance of the application, by up
-  to 20%. For Java virtual machines on servers and desktops, the difference
-  generally isn't noticeable.
+#### Maintainers
 
-* ProGuard can also remove logging code, from applications and their
-  libraries, without needing to change the source code &mdash; in fact,
-  without needing the source code at all!
+- [Romain Thomas](https://www.romainthomas.fr): [@rh0main](https://twitter.com/rh0main) - `me@romainthomas.fr`
 
-The manual pages ([markdown](docs/md),
-[html](https://www.guardsquare.com/proguard/manual)) cover the features and usage of
-ProGuard in detail.
+#### Credits
 
-## 💻 Building ProGuard
+- [Guardsquare](https://www.guardsquare.com/): Proguard's Owner
+- [Eric Lafortune](https://www.lafortune.eu/): Proguard's Author
+- [James Hamilton](https://jameshamilton.eu/): Proguard's Core dev/maintainer
 
-Building ProGuard is easy - you'll just need a Java 8 JDK installed. 
-To build from source, clone a copy of the ProGuard repository and run the following command:
+### License
 
-```bash
-./gradlew assemble
-```
-
-The artifacts will be generated in the `lib` directory. You can then execute ProGuard using the
-scripts in `bin`, for example:
-
-```bash
-bin/proguard.sh
-```
-
-You can publish the artifacts to your local Maven repository using:
-
-```bash
-./gradlew publishToMavenLocal
-```
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome in both projects.
-Feel free to check the [issues](issues) page and the [contributing
-guide](CONTRIBUTING.md) if you would like to contribute.
-
-## 📝 License
-
-Copyright (c) 2002-2023 [Guardsquare NV](https://www.guardsquare.com/).
-ProGuard is released under the [GNU General Public License, version
-2](LICENSE), with [exceptions granted to a number of
-projects](docs/md/manual/license/gplexception.md).
+dProtect is released under the same License as Proguard: [GNU General Public License v2.0](https://github.com/Guardsquare/proguard/blob/master/LICENSE)
