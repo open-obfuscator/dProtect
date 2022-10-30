@@ -38,11 +38,11 @@ import java.util.*;
  */
 public class ConfigurationParser implements AutoCloseable
 {
-    private final WordReader reader;
-    private final Properties properties;
+    protected final WordReader reader;
+    protected final Properties properties;
 
-    private String     nextWord;
-    private String     lastComments;
+    protected String nextWord;
+    protected String lastComments;
 
 
     /**
@@ -251,15 +251,14 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private boolean parseKeepKotlinMetadata() throws IOException
+    protected boolean parseKeepKotlinMetadata() throws IOException
     {
         System.err.println("The `-keepkotlinmetadata` option is deprecated and will be removed in a future ProGuard release." +
                            "Please use `-keep class kotlin.Metadata` instead.");
         return parseNoArgument(true);
     }
 
-
-    private long parseIncludeArgument(long lastModified) throws ParseException, IOException
+    protected long parseIncludeArgument(long lastModified) throws ParseException, IOException
     {
         // Read the configuration file name.
         readNextWord("configuration file name", true, true, false);
@@ -311,7 +310,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private void parseBaseDirectoryArgument() throws ParseException, IOException
+    protected void parseBaseDirectoryArgument() throws ParseException, IOException
     {
         // Read the base directory name.
         readNextWord("base directory name", true, true, false);
@@ -322,9 +321,9 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private ClassPath parseClassPathArgument(ClassPath classPath,
-                                             boolean   isOutput,
-                                             boolean   allowFeatureName)
+    protected ClassPath parseClassPathArgument(ClassPath classPath,
+                                               boolean   isOutput,
+                                               boolean   allowFeatureName)
     throws ParseException, IOException
     {
         // Create a new List if necessary.
@@ -464,7 +463,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private int parseClassVersion()
+    protected int parseClassVersion()
     throws ParseException, IOException
     {
         // Read the obligatory target.
@@ -482,7 +481,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private int parseIntegerArgument()
+    protected int parseIntegerArgument()
     throws ParseException, IOException
     {
         try
@@ -509,7 +508,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private URL parseURL()
+    protected URL parseURL()
     throws ParseException, IOException
     {
         // Read the obligatory file name.
@@ -524,7 +523,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private List parseFiles(List files)
+    protected List parseFiles(List files)
     throws ParseException, IOException
     {
         if (files == null)
@@ -538,7 +537,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private File parseFile()
+    protected File parseFile()
     throws ParseException, IOException
     {
         // Read the obligatory file name.
@@ -553,7 +552,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private File parseOptionalFile()
+    protected File parseOptionalFile()
     throws ParseException, IOException
     {
         // Read the optional file name.
@@ -574,7 +573,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private String parseOptionalArgument() throws IOException
+    protected String parseOptionalArgument() throws IOException
     {
         // Read the optional argument.
         readNextWord();
@@ -593,7 +592,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private boolean parseNoArgument(boolean value) throws IOException
+    protected boolean parseNoArgument(boolean value) throws IOException
     {
         readNextWord();
 
@@ -601,7 +600,7 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private long parseNoArgument(long value) throws IOException
+    protected long parseNoArgument(long value) throws IOException
     {
         readNextWord();
 
@@ -617,7 +616,7 @@ public class ConfigurationParser implements AutoCloseable
      * @throws IOException    if an IO error occurs while reading the class
      *                        specification.
      */
-    private List parseIfCondition(List keepClassSpecifications)
+    protected List parseIfCondition(List keepClassSpecifications)
     throws ParseException, IOException
     {
         // Read the condition.
@@ -653,13 +652,13 @@ public class ConfigurationParser implements AutoCloseable
      * @throws IOException    if an IO error occurs while reading the class
      *                        specification.
      */
-    private List parseKeepClassSpecificationArguments(List               keepClassSpecifications,
-                                                      boolean            markClasses,
-                                                      boolean            markMembers,
-                                                      boolean            markCodeAttributes,
-                                                      boolean            markConditionally,
-                                                      boolean            allowShrinking,
-                                                      ClassSpecification condition)
+    protected List parseKeepClassSpecificationArguments(List               keepClassSpecifications,
+                                                        boolean            markClasses,
+                                                        boolean            markMembers,
+                                                        boolean            markCodeAttributes,
+                                                        boolean            markConditionally,
+                                                        boolean            allowShrinking,
+                                                        ClassSpecification condition)
     throws ParseException, IOException
     {
         // Create a new List if necessary.
@@ -687,12 +686,12 @@ public class ConfigurationParser implements AutoCloseable
      * @throws IOException    if an IO error occurs while reading the class
      *                        specification.
      */
-    private KeepClassSpecification parseKeepClassSpecificationArguments(boolean            markClasses,
-                                                                        boolean            markMembers,
-                                                                        boolean            markCodeAttributes,
-                                                                        boolean            markConditionally,
-                                                                        boolean            allowShrinking,
-                                                                        ClassSpecification condition)
+    protected KeepClassSpecification parseKeepClassSpecificationArguments(boolean            markClasses,
+                                                                          boolean            markMembers,
+                                                                          boolean            markCodeAttributes,
+                                                                          boolean            markConditionally,
+                                                                          boolean            allowShrinking,
+                                                                          ClassSpecification condition)
     throws ParseException, IOException
     {
         boolean markDescriptorClasses = false;
@@ -774,7 +773,7 @@ public class ConfigurationParser implements AutoCloseable
      * @throws IOException    if an IO error occurs while reading the class
      *                        specification.
      */
-    private List parseAssumeClassSpecificationArguments(List classSpecifications)
+    protected List parseAssumeClassSpecificationArguments(List classSpecifications)
     throws ParseException, IOException
     {
         // Create a new List if necessary.
@@ -797,7 +796,7 @@ public class ConfigurationParser implements AutoCloseable
      * @throws IOException    if an IO error occurs while reading the class
      *                        specification.
      */
-    private List<ClassSpecification> parseClassSpecificationArguments(List<ClassSpecification> classSpecifications)
+    protected List<ClassSpecification> parseClassSpecificationArguments(List<ClassSpecification> classSpecifications)
     throws ParseException, IOException
     {
         // Create a new List if necessary.
@@ -1028,9 +1027,9 @@ public class ConfigurationParser implements AutoCloseable
      * @throws IOException    if an IO error occurs while reading the class
      *                        specification.
      */
-    private void parseMemberSpecificationArguments(String             externalClassName,
-                                                   boolean            allowValues,
-                                                   ClassSpecification classSpecification)
+    protected void parseMemberSpecificationArguments(String             externalClassName,
+                                                     boolean            allowValues,
+                                                     ClassSpecification classSpecification)
     throws ParseException, IOException
     {
         // Clear the annotation name.
@@ -1355,8 +1354,8 @@ public class ConfigurationParser implements AutoCloseable
      * Reads a value or value range of the given primitive type.
      * For example, values "123" or "100..199" of type "int" ("I").
      */
-    private Number[] parseValues(String externalType,
-                                 String internalType)
+    protected Number[] parseValues(String externalType,
+                                   String internalType)
     throws ParseException, IOException
     {
         readNextWord(externalType + " constant");
@@ -1380,9 +1379,9 @@ public class ConfigurationParser implements AutoCloseable
      * For example, value "123" of type "int" ("I").
      * For example, value "true" of type "boolean" ("Z"), returned as 1.
      */
-    private Number parseValue(String externalType,
-                              String internalType,
-                              String string)
+    protected Number parseValue(String externalType,
+                                String internalType,
+                                String string)
     throws ParseException
     {
         try
@@ -1432,7 +1431,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Parses the given boolean string as an integer (0 or 1).
      */
-    private Integer parseBoolean(String string)
+    protected Integer parseBoolean(String string)
     throws ParseException
     {
         if      (ConfigurationConstants.FALSE_KEYWORD.equals(nextWord))
@@ -1454,17 +1453,17 @@ public class ConfigurationParser implements AutoCloseable
      * Reads a comma-separated list of Lists of java identifiers or of file
      * names.
      */
-    private List parseCommaSeparatedLists(String  expectedDescription,
-                                          boolean readFirstWord,
-                                          boolean allowEmptyList,
-                                          boolean expectClosingParenthesis,
-                                          boolean isFileName,
-                                          boolean checkJavaIdentifiers,
-                                          boolean allowGenerics,
-                                          boolean replaceSystemProperties,
-                                          boolean replaceExternalClassNames,
-                                          boolean replaceExternalTypes,
-                                          List    list)
+    protected List parseCommaSeparatedLists(String  expectedDescription,
+                                            boolean readFirstWord,
+                                            boolean allowEmptyList,
+                                            boolean expectClosingParenthesis,
+                                            boolean isFileName,
+                                            boolean checkJavaIdentifiers,
+                                            boolean allowGenerics,
+                                            boolean replaceSystemProperties,
+                                            boolean replaceExternalClassNames,
+                                            boolean replaceExternalTypes,
+                                            List    list)
     throws ParseException, IOException
     {
         if (list == null)
@@ -1509,17 +1508,17 @@ public class ConfigurationParser implements AutoCloseable
      *   ("annotation ",    true,  false, false,  false, true,  false,  false,  false,  true,  ...)
      *   ("argument",       true,  true,  true,   false, true,  false,  false,  false,  false, ...)
      */
-    private List parseCommaSeparatedList(String  expectedDescription,
-                                         boolean readFirstWord,
-                                         boolean allowEmptyList,
-                                         boolean expectClosingParenthesis,
-                                         boolean isFileName,
-                                         boolean checkJavaIdentifiers,
-                                         boolean allowGenerics,
-                                         boolean replaceSystemProperties,
-                                         boolean replaceExternalClassNames,
-                                         boolean replaceExternalTypes,
-                                         List    list)
+    protected List parseCommaSeparatedList(String  expectedDescription,
+                                           boolean readFirstWord,
+                                           boolean allowEmptyList,
+                                           boolean expectClosingParenthesis,
+                                           boolean isFileName,
+                                           boolean checkJavaIdentifiers,
+                                           boolean allowGenerics,
+                                           boolean replaceSystemProperties,
+                                           boolean replaceExternalClassNames,
+                                           boolean replaceExternalTypes,
+                                           List    list)
     throws ParseException, IOException
     {
         return parseCommaSeparatedList(expectedDescription,
@@ -1537,18 +1536,18 @@ public class ConfigurationParser implements AutoCloseable
     }
 
 
-    private List parseCommaSeparatedList(String  expectedDescription,
-                                         boolean readFirstWord,
-                                         boolean allowEmptyList,
-                                         String  defaultIfEmpty,
-                                         boolean expectClosingParenthesis,
-                                         boolean isFileName,
-                                         boolean checkJavaIdentifiers,
-                                         boolean allowGenerics,
-                                         boolean replaceSystemProperties,
-                                         boolean replaceExternalClassNames,
-                                         boolean replaceExternalTypes,
-                                         List    list)
+    protected List parseCommaSeparatedList(String  expectedDescription,
+                                           boolean readFirstWord,
+                                           boolean allowEmptyList,
+                                           String  defaultIfEmpty,
+                                           boolean expectClosingParenthesis,
+                                           boolean isFileName,
+                                           boolean checkJavaIdentifiers,
+                                           boolean allowGenerics,
+                                           boolean replaceSystemProperties,
+                                           boolean replaceExternalClassNames,
+                                           boolean replaceExternalTypes,
+                                           List    list)
     throws ParseException, IOException
     {
         if (list == null)
@@ -1659,7 +1658,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Converts a list of class name matchers to a class specification.
      */
-    private ClassSpecification convertToClassSpecification(List<String> list)
+    protected ClassSpecification convertToClassSpecification(List<String> list)
     {
         return new ClassSpecification(null,
                                       0,
@@ -1675,7 +1674,7 @@ public class ConfigurationParser implements AutoCloseable
      * Removes any present member specification from the provided
      * class specification.
      */
-    private ClassSpecification removeMemberSpecification(ClassSpecification classSpecification)
+    protected ClassSpecification removeMemberSpecification(ClassSpecification classSpecification)
     {
         classSpecification.fieldSpecifications  = null;
         classSpecification.methodSpecifications = null;
@@ -1687,7 +1686,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Throws a ParseException for an unexpected keyword.
      */
-    private int unknownAccessFlag() throws ParseException
+    protected int unknownAccessFlag() throws ParseException
     {
         throw new ParseException("Unexpected keyword " + reader.locationDescription());
     }
@@ -1696,7 +1695,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Creates a properly resolved URL, based on the given word.
      */
-    private URL url(String word) throws ParseException, MalformedURLException
+    protected URL url(String word) throws ParseException, MalformedURLException
     {
         String fileName = replaceSystemProperties(word);
         URL url;
@@ -1740,7 +1739,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Creates a properly resolved File, based on the given word.
      */
-    private File file(String word) throws ParseException
+    protected File file(String word) throws ParseException
     {
         String fileName = replaceSystemProperties(word);
         File   file     = new File(fileName);
@@ -1759,7 +1758,7 @@ public class ConfigurationParser implements AutoCloseable
      * Replaces any properties in the given word by their values.
      * For instance, the substring "<java.home>" is replaced by its value.
      */
-    private String replaceSystemProperties(String word) throws ParseException
+    protected String replaceSystemProperties(String word) throws ParseException
     {
         int fromIndex = 0;
         while (true)
@@ -1809,7 +1808,7 @@ public class ConfigurationParser implements AutoCloseable
      * Reads the next word of the configuration in the 'nextWord' field,
      * throwing an exception if there is no next word.
      */
-    private void readNextWord(String expectedDescription)
+    protected void readNextWord(String expectedDescription)
     throws ParseException, IOException
     {
         readNextWord(expectedDescription, false, false, false);
@@ -1820,10 +1819,10 @@ public class ConfigurationParser implements AutoCloseable
      * Reads the next word of the configuration in the 'nextWord' field,
      * throwing an exception if there is no next word.
      */
-    private void readNextWord(String  expectedDescription,
-                              boolean isFileName,
-                              boolean expectSingleFile,
-                              boolean expectingAtCharacter)
+    protected void readNextWord(String  expectedDescription,
+                                boolean isFileName,
+                                boolean expectSingleFile,
+                                boolean expectingAtCharacter)
     throws ParseException, IOException
     {
         readNextWord(isFileName, expectSingleFile);
@@ -1838,7 +1837,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Reads the next word of the configuration in the 'nextWord' field.
      */
-    private void readNextWord() throws IOException
+    protected void readNextWord() throws IOException
     {
         readNextWord(false, false);
     }
@@ -1847,8 +1846,8 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Reads the next word of the configuration in the 'nextWord' field.
      */
-    private void readNextWord(boolean isFileName,
-                              boolean expectSingleFile) throws IOException
+    protected void readNextWord(boolean isFileName,
+                                boolean expectSingleFile) throws IOException
     {
         nextWord = reader.nextWord(isFileName, expectSingleFile);
     }
@@ -1857,7 +1856,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Returns whether the end of the configuration has been reached.
      */
-    private boolean configurationEnd()
+    protected boolean configurationEnd()
     {
         return configurationEnd(false);
     }
@@ -1866,7 +1865,7 @@ public class ConfigurationParser implements AutoCloseable
     /**
      * Returns whether the end of the configuration has been reached.
      */
-    private boolean configurationEnd(boolean expectingAtCharacter)
+    protected boolean configurationEnd(boolean expectingAtCharacter)
     {
         return nextWord == null ||
                nextWord.startsWith(ConfigurationConstants.OPTION_PREFIX) ||
@@ -1879,7 +1878,7 @@ public class ConfigurationParser implements AutoCloseable
      * Checks whether the given word is a valid Java identifier and throws
      * a ParseException if it isn't. Wildcard characters are accepted.
      */
-    private void checkJavaIdentifier(String expectedDescription)
+    protected void checkJavaIdentifier(String expectedDescription)
         throws ParseException
     {
         checkJavaIdentifier(expectedDescription, true);
@@ -1890,7 +1889,7 @@ public class ConfigurationParser implements AutoCloseable
      * Checks whether the given word is a valid Java identifier and throws
      * a ParseException if it isn't. Wildcard characters are accepted.
      */
-    private void checkJavaIdentifier(String expectedDescription, boolean allowGenerics)
+    protected void checkJavaIdentifier(String expectedDescription, boolean allowGenerics)
     throws ParseException
     {
         if (!isJavaIdentifier(nextWord))
@@ -1911,7 +1910,7 @@ public class ConfigurationParser implements AutoCloseable
      * Returns whether the given word is a valid Java identifier.
      * Wildcard characters are accepted.
      */
-    private boolean isJavaIdentifier(String word)
+    protected boolean isJavaIdentifier(String word)
     {
         if (word.length() == 0)
         {
@@ -1945,7 +1944,7 @@ public class ConfigurationParser implements AutoCloseable
      * Returns whether the given word contains angle brackets around
      * a non-digit string.
      */
-    private boolean containsGenerics(String word)
+    protected boolean containsGenerics(String word)
     {
         int index = 0;
 
@@ -1985,8 +1984,8 @@ public class ConfigurationParser implements AutoCloseable
      * Checks whether the given access flags are valid field access flags,
      * throwing a ParseException if they aren't.
      */
-    private void checkFieldAccessFlags(int requiredSetMemberAccessFlags,
-                                       int requiredUnsetMemberAccessFlags)
+    protected void checkFieldAccessFlags(int requiredSetMemberAccessFlags,
+                                         int requiredUnsetMemberAccessFlags)
     throws ParseException
     {
         if (((requiredSetMemberAccessFlags |
@@ -2003,8 +2002,8 @@ public class ConfigurationParser implements AutoCloseable
      * Checks whether the given access flags are valid method access flags,
      * throwing a ParseException if they aren't.
      */
-    private void checkMethodAccessFlags(int requiredSetMemberAccessFlags,
-                                        int requiredUnsetMemberAccessFlags)
+    protected void checkMethodAccessFlags(int requiredSetMemberAccessFlags,
+                                          int requiredUnsetMemberAccessFlags)
     throws ParseException
     {
         if (((requiredSetMemberAccessFlags |
