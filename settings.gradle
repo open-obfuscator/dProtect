@@ -11,10 +11,11 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'proguard'
+rootProject.name = 'dprotect'
 
 include 'base'
 include 'proguard-app'
+include 'dprotect'
 include 'retrace'
 include 'gui'
 include 'gradle-plugin'

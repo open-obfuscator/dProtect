@@ -1,0 +1,34 @@
+name: 'dProtect Main'
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Build dProtect-core & dProtect
+        shell: bash
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/dist
+          docker run --rm \
+           -v $GITHUB_WORKSPACE:/dprotect \
+           openobfuscator/dprotect-build:latest bash /dprotect/scripts/docker/gh_action.sh
+      - name: Deploy
+        env:
+          DPROTECT_S3_KEY: ${{ secrets.DPROTECT_S3_KEY }}
+          DPROTECT_S3_SECRET: ${{ secrets.DPROTECT_S3_SECRET }}
+        shell: bash
+        run: |
+          docker run \
+            -v $GITHUB_WORKSPACE:/dprotect \
+            -e GITHUB_ACTIONS="true" \
+            -e GITHUB_WORKSPACE=$GITHUB_WORKSPACE \
+            -e GITHUB_REF=$GITHUB_REF \
+            -e GITHUB_REPOSITORY=$GITHUB_REPOSITORY \
+            -e DPROTECT_S3_KEY=$DPROTECT_S3_KEY \
+            -e DPROTECT_S3_SECRET=$DPROTECT_S3_SECRET \
+            --rm \
+            openobfuscator/deployment python3 /dprotect/.github/scripts/s3-deploy.py
+

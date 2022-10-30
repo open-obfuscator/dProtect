@@ -27,7 +27,14 @@ import org.gradle.api.logging.*;
 import org.gradle.api.tasks.*;
 import org.gradle.api.tasks.Optional;
 import org.gradle.util.GradleVersion;
-import proguard.*;
+import dprotect.*;
+import proguard.ParseException;
+import proguard.ClassSpecification;
+import proguard.MemberSpecification;
+import proguard.ClassPathEntry;
+import proguard.ClassPath;
+import proguard.MemberValueSpecification;
+import proguard.KeepClassSpecification;
 import proguard.classfile.*;
 import proguard.classfile.util.ClassUtil;
 import proguard.util.ListUtil;
@@ -1428,7 +1435,7 @@ public abstract class ProGuardTask extends DefaultTask
         loggingManager.captureStandardError(LogLevel.WARN);
 
         // Run ProGuard with the collected configuration.
-        new ProGuard(getConfiguration()).execute();
+        new DProtect(getConfiguration()).execute();
 
     }
 

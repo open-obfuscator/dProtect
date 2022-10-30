@@ -18,7 +18,7 @@ def agpVersion = '4.1.0'
 gradlePlugin {
     plugins {
         proguardPlugin {
-            id = 'com.guardsquare.proguard'
+            id = 're.obfuscator.dprotect'
             implementationClass = 'proguard.gradle.plugin.ProGuardPlugin'
         }
     }
@@ -67,13 +67,13 @@ test {
 def localRepo = file("$buildDir/local-repo")
 
 task fatJar(type: ShadowJar) {
-    destinationDirectory.set(localRepo)
-    archiveFileName.set("proguard-gradle-${version}.jar")
+    destinationDirectory.set(file("$rootDir/lib"))
+    archiveFileName.set("dprotect-gradle-${version}.jar")
     from sourceSets.main.output
     configurations = [project.configurations.fatJar]
     manifest {
         attributes(
-                'Main-Class': 'proguard.ProGuard',
+                'Main-Class': 'dprotect.DProtect',
                 'Implementation-Version': archiveVersion.get())
     }
 }
@@ -127,7 +127,7 @@ afterEvaluate {
     publishing {
         publications.getByName(project.name) {
             pom {
-                description = 'Gradle plugin for ProGuard, the free shrinker, optimizer, obfuscator, and preverifier for Java bytecode'
+                description = 'Gradle plugin for dProtect, the enhanced Android code obfuscator based on Proguard™'
             }
         }
     }

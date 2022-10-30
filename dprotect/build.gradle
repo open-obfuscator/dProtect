@@ -1,0 +1,32 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+   implementation project(':base')
+}
+
+jar.manifest.attributes('Implementation-Version': version)
+
+task fatJar(type: ShadowJar) {
+    mainClassName = 'dprotect.DProtect'
+    destinationDirectory.set(file("$rootDir/lib"))
+    archiveFileName.set('dprotect.jar')
+    configurations = [project.configurations.runtimeClasspath]
+    manifest {
+        attributes(
+                'Main-Class': 'dprotect.DProtect',
+                'Multi-Release': true,
+                'Implementation-Version': archiveVersion.get())
+    }
+}
+
+assemble.dependsOn fatJar
