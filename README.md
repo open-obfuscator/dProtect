@@ -50,6 +50,10 @@ buildscript {
         mavenCentral()
         maven {
           url = uri("https://maven.pkg.github.com/open-obfuscator/dProtect")
+          credentials {
+              username = "your-username"
+              password = "the-token"
+          }
         }
     }
     dependencies {
@@ -57,6 +61,9 @@ buildscript {
     }
 }
 ```
+
+**You need to generate a Github token to use `maven.pkg.github.com`**. Alternatively,
+you can use the `dprotect-gradle-1.0.0.jar` archive of the release's artifacts.
 
 <h6>app/build.gradle</h6>
 
