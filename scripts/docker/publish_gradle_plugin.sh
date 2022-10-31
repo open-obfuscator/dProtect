@@ -17,5 +17,6 @@ popd
 # build dProtect
 pushd /dprotect
 gradle :gradle:publishAllPublicationsToGithubRepository
+gradle :base:publishAllPublicationsToGithubRepository
 popd
 
