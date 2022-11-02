@@ -54,7 +54,7 @@ implements   ClassVisitor,
         runtime = Loader.getRuntimeClasses();
         rand    = new Random((long)seed);
 
-        filter = !strings.isEmpty() ?
+        filter = strings != null && !strings.isEmpty() ?
                  new ListParser(new NameParser()).parse(strings) :
                  new ConstantMatcher(false);
     }
