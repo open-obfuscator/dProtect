@@ -93,6 +93,21 @@ implements   ReplacementSequences {
                     .iadd()
                     .__(),
             },
+            // LARGE_CST + Y
+            {
+                ____.bipush(X)
+                    .iload(Y)
+                    .iadd()
+                    .__(),
+                ____.bipush(X)
+                    .iload(Y)
+                    .iand()
+                    .bipush(X)
+                    .iload(Y)
+                    .ior()
+                    .iadd()
+                    .__(),
+            },
             // (int) X++
             {
                 ____.iinc(X, Y)
