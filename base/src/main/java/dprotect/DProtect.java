@@ -40,7 +40,7 @@ import proguard.shrink.Shrinker;
 import proguard.strip.KotlinAnnotationStripper;
 import proguard.util.*;
 import proguard.util.kotlin.KotlinUnsupportedVersionChecker;
-import proguard.util.kotlin.asserter.KotlinMetadataAsserter;
+import proguard.util.kotlin.asserter.KotlinMetadataVerifier;
 
 import java.io.*;
 
@@ -350,7 +350,7 @@ public class DProtect
         if (configuration.keepKotlinMetadata &&
             configuration.enableKotlinAsserter)
         {
-            passRunner.run(new KotlinMetadataAsserter(configuration), appView);
+            passRunner.run(new KotlinMetadataVerifier(configuration), appView);
         }
     }
 
@@ -440,7 +440,7 @@ public class DProtect
         if (configuration.keepKotlinMetadata &&
             configuration.enableKotlinAsserter)
         {
-            passRunner.run(new KotlinMetadataAsserter(configuration), appView);
+            passRunner.run(new KotlinMetadataVerifier(configuration), appView);
         }
     }
 
@@ -529,7 +529,7 @@ public class DProtect
         if (configuration.keepKotlinMetadata &&
             configuration.enableKotlinAsserter)
         {
-            passRunner.run(new KotlinMetadataAsserter(configuration), appView);
+            passRunner.run(new KotlinMetadataVerifier(configuration), appView);
         }
     }
 
