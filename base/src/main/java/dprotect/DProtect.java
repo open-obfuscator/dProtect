@@ -4,9 +4,9 @@ import dprotect.obfuscation.CodeObfuscator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import proguard.AfterInitConfigurationChecker;
+import proguard.AfterInitConfigurationVerifier;
 import proguard.AppView;
-import proguard.ConfigurationChecker;
+import proguard.ConfigurationVerifier;
 import proguard.ConfigurationWriter;
 import proguard.Dumper;
 import proguard.GPL;
@@ -303,7 +303,7 @@ public class DProtect
      */
     private void checkConfiguration() throws IOException
     {
-        new ConfigurationChecker(configuration).check();
+        new ConfigurationVerifier(configuration).check();
     }
 
 
@@ -378,7 +378,7 @@ public class DProtect
      */
     private void checkConfigurationAfterInitialization() throws Exception
     {
-        passRunner.run(new AfterInitConfigurationChecker(configuration), appView);
+        passRunner.run(new AfterInitConfigurationVerifier(configuration), appView);
     }
 
     /**
